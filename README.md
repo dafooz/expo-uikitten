@@ -1,4 +1,4 @@
-# Scaffoldin project for Expo with UI Kitten
+# Scaffolding project for Expo with UI Kitten
 
 This repository is a bare project for quick starting a project for React Native.
 
