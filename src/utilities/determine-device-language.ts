@@ -9,16 +9,18 @@ export const determineDeviceLanguage = () => {
       deviceLanguage =
         NativeModules.SettingsManager.settings.AppleLocale ||
         NativeModules.SettingsManager.settings.AppleLanguages[0]; //iOS 13
+      break;
     case 'android':
       deviceLanguage = NativeModules.I18nManager.localeIdentifier;
+      break;
     case 'web':
       deviceLanguage = detectBrowserLanguage();
+      break;
   }
 
   if (deviceLanguage) {
-    switch (deviceLanguage.slice(0, 2)) {
+    switch (deviceLanguage.slice(0, 2).toLowerCase()) {
       case 'fr':
-      case 'FR':
         return 'fr';
       default:
         return 'en';

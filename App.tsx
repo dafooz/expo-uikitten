@@ -5,9 +5,10 @@ import React from 'react';
 import { AsyncStorage } from 'react-native';
 
 import { MainProvider } from './src/providers/main.provider';
+import { StorageKeys } from './storage-keys';
 
 const readAppMode = async () => {
-  const mode = await AsyncStorage.getItem('collections_mode');
+  const mode = await AsyncStorage.getItem(StorageKeys.displayMode);
   return mode === 'dark' ? 'dark' : 'light';
 };
 

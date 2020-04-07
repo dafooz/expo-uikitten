@@ -1,11 +1,28 @@
-import React, { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { AsyncStorage, SafeAreaView, StatusBar } from 'react-native';
 
-import { dark as EvaDarkTheme, light as EvaLightTheme, mapping } from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
+import {
+  dark as EvaDarkTheme,
+  light as EvaLightTheme,
+  mapping,
+} from '@eva-design/eva';
+import {
+  ApplicationProvider,
+  IconRegistry,
+  Layout,
+  Text,
+} from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
+import { StorageKeys } from '../../storage-keys';
 import { extendedTheme } from '../ui/extended-theme';
 // import { default as customMapping } from '../ui/mapping.json';
 import { determineDeviceLanguage, loadApplicationFonts } from '../utilities';
@@ -37,7 +54,7 @@ const MainProvider: FC<{ appMode: 'light' | 'dark' }> = ({ appMode }) => {
     appMode
   );
 
-  const { i18n } = useTranslation('collections', {
+  const { i18n } = useTranslation('application', {
     useSuspense: false,
   });
   const [translationsLoaded, setTranlsationsLoaded] = useState<boolean>(false);
@@ -63,18 +80,15 @@ const MainProvider: FC<{ appMode: 'light' | 'dark' }> = ({ appMode }) => {
     setAppDisplayMode((previousMode: 'light' | 'dark') => {
       setTheme(previousMode === 'dark' ? lightTheme : darkTheme);
       const newMode = previousMode === 'dark' ? 'light' : 'dark';
-      AsyncStorage.setItem('collections_mode', newMode);
+      AsyncStorage.setItem(StorageKeys.displayMode, newMode);
       return newMode;
     });
   };
 
   useEffect(() => {
     loadLanguage();
-  }, [loadLanguage]);
-
-  useEffect(() => {
     loadFonts();
-  }, [loadFonts]);
+  }, [loadLanguage, loadFonts]);
 
   return (
     <MainContext.Provider
@@ -97,13 +111,13 @@ const MainProvider: FC<{ appMode: 'light' | 'dark' }> = ({ appMode }) => {
         {appIsReady ? (
           <SafeAreaView>
             <Layout>
-              <Text category='h6'>App comes here</Text>
+              <AppLoaded />
             </Layout>
           </SafeAreaView>
         ) : (
           <SafeAreaView>
             <Layout>
-              <Text>Loading</Text>
+              <AppLoading />
             </Layout>
           </SafeAreaView>
         )}
@@ -118,6 +132,17 @@ const useAppContext = () => {
     throw new Error('useAppContext must be used within a MainProvider');
   }
   return context;
+};
+
+// Components showcasing the use of the translation hook
+const AppLoaded: FC = () => {
+  const { t } = useTranslation();
+  return <Text category='h6'>{t('app_info')}</Text>;
+};
+
+const AppLoading: FC = () => {
+  const { t } = useTranslation();
+  return <Text category='h6'>{t('loading')}</Text>;
 };
 
 export { MainProvider, useAppContext };
