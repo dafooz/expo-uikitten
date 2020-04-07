@@ -10,4 +10,6 @@ This repository is a bare project for quick starting a project for React Native.
 
 ## Some more info
 
+`expo-cli` version 3.17.18
+
 This section will be completed as soon as I have some time...
